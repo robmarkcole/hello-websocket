@@ -5,7 +5,7 @@ Usage:
 """
 
 import os
-import StringIO
+from PIL import Image
 import sys
 import time
 
@@ -23,7 +23,7 @@ height = None if len(sys.argv) <= 2 else int(sys.argv[2])
 max_sleep = 5.0
 cur_sleep = 0.1
 while True:
-    cap = cv2.VideoCapture(-1)
+    cap = cv2.VideoCapture(0)
     if cap.isOpened():
         break
     print('not opened, sleeping {}s'.format(cur_sleep))
@@ -52,11 +52,11 @@ while True:
     if image is None:
         time.sleep(0.5)
         continue
-    hello, image = cv2.imencode('.jpg', image)
-    sio = StringIO.StringIO()
-    np.save(sio, image)
-    value = sio.getvalue()
-    store.set('image', value)
+    # hello, image = cv2.imencode('.jpg', image)
+    jpg = Image.fromarray(image)
+    temp_image = 'tempfile'
+    jpg.save(temp_image,'JPEG')
+    store.set('image', temp_image)
     image_id = os.urandom(4)
     store.set('image_id', image_id)
     
