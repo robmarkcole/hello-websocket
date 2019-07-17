@@ -47,14 +47,14 @@ class SocketHandler(websocket.WebSocketHandler):
         image_filename = self._store.get('image').decode() # tempfile
         try:
             image_pil = Image.open(image_filename) # PIL.JpegImagePlugin.JpegImageFile
+            image_base64 = base64.b64encode(image_pil.tobytes()) # base64 string
+            self.write_message(image_base64)
+
+            # Print object ID and the framerate.
+            text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), *self._fps.tick())
+            print(text)
         except:
             pass
-        image_base64 = base64.b64encode(image_pil.tobytes()) # base64 string
-        self.write_message(image_base64)
-
-        # Print object ID and the framerate.
-        text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), *self._fps.tick())
-        print(text)
 
 app = web.Application([
     (r'/', IndexHandler),

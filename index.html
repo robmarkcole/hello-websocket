@@ -15,7 +15,7 @@
             };
             ws.onmessage = function (msg) {
                $("#cam").attr('src', 'data:image/jpg;base64,' + msg.data);
-               ws.send(1);
+               //ws.send(1);
             };
             ws.onerror = function (e) {
                console.log(e);

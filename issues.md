@@ -1,4 +1,5 @@
 # issues
+### OSError: cannot identify image file 'tempfile.jpg'
 On connecting to the stream:
 ```
 ERROR:tornado.application:Uncaught exception GET /ws (::1)
@@ -13,4 +14,6 @@ Traceback (most recent call last):
 OSError: cannot identify image file 'tempfile.jpg'
 ```
 Possibly https://stackoverflow.com/questions/19230991/image-open-cannot-identify-image-file-python
-Overcome by introducing a sleep in recorder
+Overcome by introducing a sleep in recorder.
+
+WHY ARE WE WRITING THIS FRAME IF WE COULD JUST PUT THE BASE64 IMAGE ON THE REDIS QUEUE?
