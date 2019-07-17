@@ -1,7 +1,7 @@
 """
 Continuously capture images from a webcam and write to a Redis store.
 Usage:
-   python recorder.py [width] [height]
+   python3 recorder.py [width] [height]
 """
 
 import os
@@ -53,8 +53,9 @@ while True:
         time.sleep(0.5)
         continue
     # hello, image = cv2.imencode('.jpg', image)
-    jpg = Image.fromarray(image)
-    temp_image = 'tempfile'
+    imgRGB=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+    jpg = Image.fromarray(imgRGB)
+    temp_image = 'tempfile.jpg'
     jpg.save(temp_image,'JPEG')
     store.set('image', temp_image)
     image_id = os.urandom(4)
@@ -63,3 +64,4 @@ while True:
     # Print the framerate.
     text = '{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick())
     print(text)
+    time.sleep(1) # allow tempfile.jpg to save

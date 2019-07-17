@@ -1,12 +1,14 @@
 """
 Serve webcam images from a Redis store using Tornado.
 Usage:
-   python server.py
+   python3 server.py
 """
 
 import base64
-import StringIO
+import io
 import time
+from PIL import Image
+from PIL import ImageFile
 
 import coils
 import numpy as np
@@ -14,7 +16,7 @@ import redis
 from tornado import websocket, web, ioloop
 
 
-MAX_FPS = 100
+MAX_FPS = 1
 
 class IndexHandler(web.RequestHandler):
     def get(self):
@@ -30,6 +32,7 @@ class SocketHandler(websocket.WebSocketHandler):
         self._store = redis.Redis()
         self._fps = coils.RateTicker((1, 5, 10))
         self._prev_image_id = None
+        ImageFile.LOAD_TRUNCATED_IMAGES = True
 
     def on_message(self, message):
         """ Retrieve image ID from database until different from last ID,
@@ -41,11 +44,13 @@ class SocketHandler(websocket.WebSocketHandler):
             if image_id != self._prev_image_id:
                 break
         self._prev_image_id = image_id
-        image = self._store.get('image')
-        image = StringIO.StringIO(image)
-        image = np.load(image)
-        image = base64.b64encode(image)
-        self.write_message(image)
+        image_filename = self._store.get('image').decode() # tempfile
+        try:
+            image_pil = Image.open(image_filename) # PIL.JpegImagePlugin.JpegImageFile
+        except:
+            pass
+        image_base64 = base64.b64encode(image_pil.tobytes()) # base64 string
+        self.write_message(image_base64)
 
         # Print object ID and the framerate.
         text = '{} {:.2f}, {:.2f}, {:.2f} fps'.format(id(self), *self._fps.tick())
@@ -58,4 +63,5 @@ app = web.Application([
 
 if __name__ == '__main__':
     app.listen(9000)
+    print('visit localhost:9000')
     ioloop.IOLoop.instance().start()
