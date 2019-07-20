@@ -55,7 +55,7 @@ while True:
     # hello, image = cv2.imencode('.jpg', image)
     imgRGB=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
     jpg = Image.fromarray(imgRGB)
-    temp_image = 'tempfile.jpg'
+    temp_image = 'tempfile'
     jpg.save(temp_image,'JPEG')
     store.set('image', temp_image)
     image_id = os.urandom(4)
