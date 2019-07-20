@@ -64,4 +64,4 @@ while True:
     # Print the framerate.
     text = '{:.2f}, {:.2f}, {:.2f} fps'.format(*fps.tick())
     print(text)
-    time.sleep(1) # allow tempfile.jpg to save
+    #time.sleep(1) # allow tempfile.jpg to save

@@ -1,4 +1,4 @@
-## hello-websocket python3
+## hello-websocket python3 BROKEN
 
 Webcam over websocket in Python, using OpenCV and 
 `Tornado <http://www.tornadoweb.org>`_.
@@ -38,6 +38,6 @@ Make sure redis server is running with `redis-server` then run the recorder:
 ```python3 recorder.py```
 
 Now (in a different shell) run the server:
-```python3 server```
+```python3 server.py```
    
 Go to http://localhost:9000 to view the webcam.
